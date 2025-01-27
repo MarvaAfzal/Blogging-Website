@@ -1,0 +1,29 @@
+name: PR Validation Workflow
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Lint HTML
+        run: htmlhint "src/**/*.html"
+
+      - name: Lint CSS
+        run: stylelint "styles/**/*.css"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Website
+        run: parcel build src/index.html
